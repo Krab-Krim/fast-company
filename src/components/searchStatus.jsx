@@ -1,25 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SearchStatus = ({ length }) => {
-    const count = length.length;
-
+const SearchStatus = ({ props }) => {
     const formatCount = () => {
-        return count === 0
+        return props === 0
             ? "Никто с тобой не тусанет"
-            : count + ` ${renderPhrase()} с тобой сегодня`;
+            : props + ` ${renderPhrase()} с тобой сегодня`;
     };
 
     const getBadgeClasses = () => {
         let classes = "badge m-2 ";
-        classes += count === 0 ? "bg-danger" : "bg-primary";
+        classes += props === 0 ? "bg-danger" : "bg-primary";
         return classes;
     };
 
     const renderPhrase = () => {
-        if (count === 1 || count >= 5) {
+        if (props === 1 || props >= 5) {
             return "человек тусанет";
-        } else if (count >= 2 && count < 5) {
+        } else if (props >= 2 && props < 5) {
             return "человека тусанут";
         }
     };
@@ -34,7 +32,7 @@ const SearchStatus = ({ length }) => {
 };
 
 SearchStatus.propTypes = {
-    length: PropTypes.array.isRequired
+    props: PropTypes.number
 };
 
 export default SearchStatus;
