@@ -4,12 +4,12 @@ import BookMark from "./bookmark";
 import PropTypes from "prop-types";
 
 const User = ({ user, ...props }) => {
-    const getListUsers = user.map((item) => {
+    const getListUsers = user.map(item => {
         return (
             <tr key={item._id}>
                 <td>{item.name}</td>
                 <td>
-                    <Qualitie color={item} />
+                    <Qualitie color={item}/>
                 </td>
                 <td>{item.profession.name}</td>
                 <td>{item.completedMeetings}</td>
@@ -38,7 +38,7 @@ const User = ({ user, ...props }) => {
 };
 
 User.propTypes = {
-    user: PropTypes.array.isRequired,
+    user: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     props: PropTypes.array,
     onToggleBookMark: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
