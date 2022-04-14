@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import api from "../api";
 import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
+import _ from "lodash";
 
 const Users = ({ users, ...props }) => {
     const pageSize = 2;
@@ -30,7 +31,7 @@ const Users = ({ users, ...props }) => {
     };
 
     const filteredUsers = selectedProf
-        ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+        ? users.filter((user) => _.isEqual(user.profession, selectedProf))
         : users;
 
     const count = filteredUsers.length;
@@ -39,6 +40,14 @@ const Users = ({ users, ...props }) => {
 
     const clearFilter = () => {
         setSelectedProf();
+    };
+
+    const handleDeleteUser = (userId) => {
+        props.onDelete(userId);
+        const pageCountUser = Math.ceil(count / pageSize);
+
+        if (count % 2 !== 0 && currentPage === pageCountUser) setCurrentPage(pageCountUser - 1);
+        if (count - 1 === 0) clearFilter();
     };
 
     return (
@@ -71,7 +80,7 @@ const Users = ({ users, ...props }) => {
                         <tbody>
                             <User
                                 onToggleBookMark={props.onToggleBookMark}
-                                onDelete={props.onDelete}
+                                onDelete={handleDeleteUser}
                                 user={userCrop}
                             />
                         </tbody>

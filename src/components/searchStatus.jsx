@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 
 const SearchStatus = ({ props }) => {
     const formatCount = () => {
-        return props === 0
+        return !props
             ? "Никто с тобой не тусанет"
             : props + ` ${renderPhrase()} с тобой сегодня`;
     };
 
     const getBadgeClasses = () => {
-        let classes = "badge m-2 ";
-        classes += props === 0 ? "bg-danger" : "bg-primary";
+        let classes = "badge my-3 d-flex justify-content-center ";
+        classes += !props ? "bg-danger" : "bg-primary";
         return classes;
     };
 
