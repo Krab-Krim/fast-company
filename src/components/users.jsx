@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import User from "./user";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
@@ -7,12 +6,56 @@ import api from "../api";
 import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import _ from "lodash";
+import UserTable from "./usersTable";
+import loaderImg from "../statics/images/loader.gif";
+import pictures from "../statics/images/images.png";
 
-const Users = ({ users, ...props }) => {
-    const pageSize = 2;
+const Users = () => {
+    const pageSize = 8;
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        let loader = true;
+        const h1 = document.querySelector("h1");
+
+        if (loader === true) {
+            document.body.style.backgroundImage = `url(${loaderImg})`;
+            document.body.style.backgroundRepeat = "no-repeat";
+            document.body.style.backgroundAttachment = "fixed";
+            document.body.style.backgroundPosition = "center";
+            h1.style.display = "none";
+        }
+
+        api.users.fetchAll().then((data) => {
+            loader = false;
+
+            if (!loader) {
+                document.body.style.backgroundImage = `url(${pictures})`;
+                h1.style.display = "block";
+            }
+            setUsers(data);
+        });
+    }, []);
+
+    const handleDelete = (userId) => {
+        setUsers((prevState) => prevState.filter((el) => el._id !== userId));
+    };
+
+    const handleToggleBookMark = (id) => {
+        setUsers(
+            users.map((colorIcon) => {
+                if (colorIcon._id === id) {
+                    return { ...colorIcon, bookmark: !colorIcon.bookmark };
+                } else {
+                    return { ...colorIcon };
+                }
+            })
+        );
+    };
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
@@ -30,20 +73,26 @@ const Users = ({ users, ...props }) => {
         setCurrentPage(pageIndex);
     };
 
+    const handleSort = (item) => {
+        setSortBy(item);
+    };
+
     const filteredUsers = selectedProf
         ? users.filter((user) => _.isEqual(user.profession, selectedProf))
         : users;
 
     const count = filteredUsers.length;
 
-    const userCrop = paginate(filteredUsers, currentPage, pageSize);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+
+    const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
     const clearFilter = () => {
         setSelectedProf();
     };
 
     const handleDeleteUser = (userId) => {
-        props.onDelete(userId);
+        handleDelete(userId);
         const pageCountUser = Math.ceil(count / pageSize);
 
         if (count % 2 !== 0 && currentPage === pageCountUser) setCurrentPage(pageCountUser - 1);
@@ -59,32 +108,24 @@ const Users = ({ users, ...props }) => {
                         items={professions}
                         onItemSelect={handleProfessionSelect}
                     />
-                    <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
+                    <button
+                        className="btn btn-secondary mt-2"
+                        onClick={clearFilter}
+                    >
+                        Очистить
+                    </button>
                 </div>
             )}
             <div className="d-flex flex-column">
                 <SearchStatus props={count}/>
                 {count > 0 && (
-                    <table className="table table-hover">
-                        <thead>
-                            <tr className="table-dark">
-                                <th scope="col">Имя</th>
-                                <th scope="col">Качества</th>
-                                <th scope="col">Профессия</th>
-                                <th scope="col">Встретился, раз</th>
-                                <th scope="col">Оценка</th>
-                                <th scope="col">Избранное</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <User
-                                onToggleBookMark={props.onToggleBookMark}
-                                onDelete={handleDeleteUser}
-                                user={userCrop}
-                            />
-                        </tbody>
-                    </table>
+                    <UserTable
+                        user={userCrop}
+                        onDelete={handleDeleteUser}
+                        onToggleBookMark={handleToggleBookMark}
+                        onSort={handleSort}
+                        selectedSort={sortBy}
+                    />
                 )}
                 <div className="d-flex justify-content-center">
                     <Pagination
@@ -102,8 +143,8 @@ const Users = ({ users, ...props }) => {
 Users.propTypes = {
     users: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     props: PropTypes.object,
-    onToggleBookMark: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onToggleBookMark: PropTypes.func,
+    onDelete: PropTypes.func
 };
 
 export default Users;
