@@ -11,6 +11,7 @@ const UserTable = ({ user, onSort, selectedSort, ...props }) => {
             name: "Имя"
         },
         qualities: {
+            path: "qualities",
             name: "Качества",
             component: (user) => <QualitiesList item={user}/>
         },

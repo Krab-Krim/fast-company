@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
+    console.log("onSort", onSort);
+    console.log("selectedSort", selectedSort);
+    console.log("columns", columns);
     const handleSort = (item) => {
         if (selectedSort.path === item) {
             onSort({
@@ -23,6 +26,11 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
         }
     };
 
+    const thStyle = {
+        width: "250px",
+        textAlign: "center"
+    };
+
     return (
         <thead>
             <tr className="table-dark">
@@ -36,6 +44,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         }
                         { ...{ role: columns[column].path && "button" }}
                         scope="col"
+                        style={thStyle}
                     >
                         {columns[column].name}
                         {renderSortArrow(selectedSort, columns[column].path)}

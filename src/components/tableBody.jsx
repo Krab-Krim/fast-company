@@ -16,12 +16,20 @@ const TableBody = ({ data, columns }) => {
         return _.get(item, columns[column].path);
     };
 
+    const tdStyle = {
+        textAlign: "center",
+        height: "90px"
+    };
+
     return (
         <tbody>
             {data.map((item) =>
                 <tr key={item._id}>
                     {Object.keys(columns).map((column) => (
-                        <td key={column}>
+                        <td
+                            key={column}
+                            style={tdStyle}
+                        >
                             { renderContent(item, column) }
                         </td>
                     ))}
