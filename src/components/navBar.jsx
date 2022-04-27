@@ -1,17 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
     return (
-        <ul className="nav nav-pills justify-content-center">
+        <ul className="nav nav-pills justify-content-center m-2">
             <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/">Main</Link>
+                <NavLink className="nav-link" exact={true} to="/">Main</NavLink>
             </li>
             <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
+                <NavLink className="nav-link" to="/login">Login</NavLink>
             </li>
             <li className="nav-item">
-                <Link className="nav-link" to="/users">Users</Link>
+                <NavLink className="nav-link" to="/users">Users</NavLink>
             </li>
         </ul>
     );

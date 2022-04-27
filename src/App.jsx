@@ -11,10 +11,10 @@ function App() {
         <div>
             <NavBar/>
             <Switch>
-                <Route path="/" exact component={Main}/>
-                <Route path="/login" component={Login}/>
-                <Route path="/users/:userId?" component={Users}/>
-                <Route path="/404" component={NotFound}/>
+                <Route path="/" exact exactly component={Main}/>
+                <Route path="/login" exactly component={Login}/>
+                <Route path="/users/:userId?" exactly component={Users}/>
+                <Route path="/404" exactly component={NotFound}/>
                 <Redirect from="/admin" to="/"/>
                 <Redirect to="/404"/>
             </Switch>

@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import Loader from "../components/loader";
 
 const Users = () => {
-    const pageSize = 8;
+    const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -19,6 +19,7 @@ const Users = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const params = useParams();
     const { userId } = params;
+    document.body.style.backgroundImage = `url(${pictures})`;
 
     useEffect(() => {
         document.body.style.backgroundRepeat = "no-repeat";
@@ -26,7 +27,6 @@ const Users = () => {
         document.body.style.backgroundPosition = "center";
         api.users.fetchAll().then((data) => {
             setIsLoaded(true);
-            document.body.style.backgroundImage = `url(${pictures})`;
             setUsers(data);
         });
     }, []);
@@ -94,6 +94,7 @@ const Users = () => {
             ? <UserPage userListId={userId} />
             : <UserList professions={professions} selectedProf={selectedProf} handleProfessionSelect={handleProfessionSelect} clearFilter={clearFilter} count={count} userCrop={userCrop} handleDeleteUser={handleDeleteUser} handleToggleBookMark={handleToggleBookMark} handleSort={handleSort} sortBy={sortBy} pageSize={pageSize} currentPage={currentPage} handlePageChange={handlePageChange}/>;
     };
+
     return (
         <>
             { isLoaded

@@ -8,8 +8,7 @@ const Loader = () => {
     document.body.style.backgroundPosition = "center";
 
     return (
-        <>
-        </>
+        <> </>
     );
 };
 

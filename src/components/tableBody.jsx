@@ -17,7 +17,7 @@ const TableBody = ({ data, columns }) => {
 
         if (columns[column].path === "name") {
             return (
-                <Link key={item.id} to={`users/${item._id}`}>
+                <Link key={item.id} to={`users/${item._id}`} className="text-decoration-none text-dark">
                     <p>{item.name}</p>
                 </Link>
             );
