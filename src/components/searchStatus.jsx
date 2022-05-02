@@ -10,7 +10,7 @@ const SearchStatus = ({ props }) => {
 
     const getBadgeClasses = () => {
         let classes = "badge my-3 d-flex justify-content-center ";
-        classes += !props ? "bg-danger" : "bg-primary";
+        classes += !props ? "bg-danger" : "bg-success";
         return classes;
     };
 
