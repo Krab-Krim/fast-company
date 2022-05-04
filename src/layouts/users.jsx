@@ -19,6 +19,8 @@ const Users = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const params = useParams();
     const { userId } = params;
+    const [value, setValue] = useState("");
+
     document.body.style.backgroundImage = `url(${pictures})`;
 
     useEffect(() => {
@@ -67,19 +69,30 @@ const Users = () => {
         setSortBy(item);
     };
 
+    const clearFilter = () => {
+        setSelectedProf();
+    };
+
+    const filteredCountries = users.filter((user) => {
+        return user.name.toLowerCase().includes(value.toLowerCase());
+    });
+
+    const search = document.querySelector(".search");
+
     const filteredUsers = selectedProf
-        ? users.filter((user) => _.isEqual(user.profession, selectedProf))
-        : users;
+        ? filteredCountries.filter((user) => _.isEqual(user.profession, selectedProf))
+        : filteredCountries;
 
     const count = filteredUsers.length;
+
+    if (count === 0 && filteredCountries.length > 0 && selectedProf !== undefined && value.length > 0) {
+        search.value = "";
+        setValue("");
+    };
 
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
 
     const userCrop = paginate(sortedUsers, currentPage, pageSize);
-
-    const clearFilter = () => {
-        setSelectedProf();
-    };
 
     const handleDeleteUser = (userId) => {
         handleDelete(userId);
@@ -92,15 +105,28 @@ const Users = () => {
     const component = () => {
         return userId
             ? <UserPage userListId={userId} />
-            : <UserList professions={professions} selectedProf={selectedProf} handleProfessionSelect={handleProfessionSelect} clearFilter={clearFilter} count={count} userCrop={userCrop} handleDeleteUser={handleDeleteUser} handleToggleBookMark={handleToggleBookMark} handleSort={handleSort} sortBy={sortBy} pageSize={pageSize} currentPage={currentPage} handlePageChange={handlePageChange}/>;
+            : <UserList
+                professions={professions}
+                selectedProf={selectedProf}
+                onItemSelect={handleProfessionSelect}
+                clearFilter={clearFilter}
+                count={count}
+                userCrop={userCrop}
+                onDelete={handleDeleteUser}
+                onToggleBookMark={handleToggleBookMark}
+                handleSort={handleSort}
+                sortBy={sortBy}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                users={users}
+                setValue={setValue}
+            />;
     };
 
     return (
         <>
-            { isLoaded
-                ? component()
-                : <Loader/>
-            }
+            { isLoaded ? component() : <Loader/> }
         </>
     );
 };
