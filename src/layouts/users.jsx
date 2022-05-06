@@ -19,7 +19,7 @@ const Users = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const params = useParams();
     const { userId } = params;
-    const [value, setValue] = useState("");
+    const [valueSearch, setValueSearch] = useState("");
 
     document.body.style.backgroundImage = `url(${pictures})`;
 
@@ -74,7 +74,7 @@ const Users = () => {
     };
 
     const filteredCountries = users.filter((user) => {
-        return user.name.toLowerCase().includes(value.toLowerCase());
+        return user.name.toLowerCase().includes(valueSearch.toLowerCase());
     });
 
     const search = document.querySelector(".search");
@@ -85,9 +85,9 @@ const Users = () => {
 
     const count = filteredUsers.length;
 
-    if (count === 0 && filteredCountries.length > 0 && selectedProf !== undefined && value.length > 0) {
+    if (count === 0 && filteredCountries.length > 0 && selectedProf !== undefined && valueSearch.length > 0) {
         search.value = "";
-        setValue("");
+        setValueSearch("");
     };
 
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -120,7 +120,7 @@ const Users = () => {
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
                 users={users}
-                setValue={setValue}
+                setValue={setValueSearch}
             />;
     };
 
