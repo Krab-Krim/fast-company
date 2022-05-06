@@ -4,8 +4,24 @@ import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import Pagination from "./pagination";
 import PropTypes from "prop-types";
+import Search from "./search";
 
-const UserList = ({ professions, selectedProf, handleProfessionSelect, clearFilter, count, userCrop, handleDeleteUser, handleToggleBookMark, handleSort, sortBy, pageSize, currentPage, handlePageChange }) => {
+const UserList = ({
+    professions,
+    selectedProf,
+    onItemSelect,
+    clearFilter,
+    count,
+    userCrop,
+    onDelete,
+    onToggleBookMark,
+    handleSort,
+    sortBy,
+    pageSize,
+    currentPage,
+    onPageChange,
+    setValue
+}) => {
     return <>
         <div className="d-flex">
             {professions && (
@@ -13,7 +29,7 @@ const UserList = ({ professions, selectedProf, handleProfessionSelect, clearFilt
                     <GroupList
                         selectedItem={selectedProf}
                         items={professions}
-                        onItemSelect={handleProfessionSelect}
+                        onItemSelect={onItemSelect}
                     />
                     <button
                         className="btn btn-secondary mt-2"
@@ -23,13 +39,14 @@ const UserList = ({ professions, selectedProf, handleProfessionSelect, clearFilt
                     </button>
                 </div>
             )}
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column w-100 pe-3">
                 <SearchStatus props={count}/>
+                <Search setValue={setValue} clearFilter={clearFilter}/>
                 {count > 0 && (
                     <UserTable
                         user={userCrop}
-                        onDelete={handleDeleteUser}
-                        onToggleBookMark={handleToggleBookMark}
+                        onDelete={onDelete}
+                        onToggleBookMark={onToggleBookMark}
                         onSort={handleSort}
                         selectedSort={sortBy}
                     />
@@ -39,7 +56,7 @@ const UserList = ({ professions, selectedProf, handleProfessionSelect, clearFilt
                         itemsCount={count}
                         pageSize={pageSize}
                         currentPage={currentPage}
-                        onPageChange={handlePageChange}
+                        onPageChange={onPageChange}
                     />
                 </div>
             </div>
@@ -47,25 +64,22 @@ const UserList = ({ professions, selectedProf, handleProfessionSelect, clearFilt
     </>;
 };
 
-export default UserList;
-
 UserList.propTypes = {
-    users: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    props: PropTypes.object,
     onToggleBookMark: PropTypes.func,
     onDelete: PropTypes.func,
+    onItemSelect: PropTypes.func,
     professions: PropTypes.array,
     selectedProf: PropTypes.object,
-    handleProfessionSelect: PropTypes.func,
     clearFilter: PropTypes.func,
     count: PropTypes.number,
     userCrop: PropTypes.array,
-    handleDeleteUser: PropTypes.func,
-    handleToggleBookMark: PropTypes.func,
     handleSort: PropTypes.func,
     sortBy: PropTypes.object,
     pageSize: PropTypes.number,
     currentPage: PropTypes.number,
-    handlePageChange: PropTypes.func,
-    id: PropTypes.func
+    onPageChange: PropTypes.func,
+    search: PropTypes.func,
+    setValue: PropTypes.func
 };
+
+export default UserList;
