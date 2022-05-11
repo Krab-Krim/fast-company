@@ -1,12 +1,12 @@
 import React from "react";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
-import Pagination from "./pagination";
+import GroupList from "../../common/groupList";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
+import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
-import Search from "./search";
+import Search from "../../common/search";
 
-const UserList = ({
+const UserListPage = ({
     professions,
     selectedProf,
     onItemSelect,
@@ -64,11 +64,11 @@ const UserList = ({
     </>;
 };
 
-UserList.propTypes = {
+UserListPage.propTypes = {
     onToggleBookMark: PropTypes.func,
     onDelete: PropTypes.func,
     onItemSelect: PropTypes.func,
-    professions: PropTypes.array,
+    professions: PropTypes.object,
     selectedProf: PropTypes.object,
     clearFilter: PropTypes.func,
     count: PropTypes.number,
@@ -82,4 +82,4 @@ UserList.propTypes = {
     setValue: PropTypes.func
 };
 
-export default UserList;
+export default UserListPage;

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import BookMarkFalse from "../statics/images/bookmark/1.svg";
-import BookMarkTrue from "../statics/images/bookmark/2.svg";
+import BookMarkFalse from "../../statics/images/bookmark/1.svg";
+import BookMarkTrue from "../../statics/images/bookmark/2.svg";
 
 const BookMark = ({ status, ...props }) => {
     const bookmarkStatus = () => {

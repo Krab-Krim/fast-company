@@ -1,5 +1,5 @@
 import React from "react";
-import loader from "../statics/images/loader.gif";
+import loader from "../../statics/images/loader.gif";
 
 const Loader = () => {
     document.body.style.backgroundImage = `url(${loader})`;

@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 import api from "../api";
 import _ from "lodash";
 import pictures from "../statics/images/images.png";
-import UserPage from "../components/userPage";
-import UserList from "../components/usersList";
+import UserPage from "../components/page/userPage/userPage";
+import UserListPage from "../components/page/usersListPage";
 import { useParams } from "react-router-dom";
-import Loader from "../components/loader";
+import Loader from "../components/common/loader";
 
 const Users = () => {
     const pageSize = 6;
@@ -105,7 +105,7 @@ const Users = () => {
     const component = () => {
         return userId
             ? <UserPage userListId={userId} />
-            : <UserList
+            : <UserListPage
                 professions={professions}
                 selectedProf={selectedProf}
                 onItemSelect={handleProfessionSelect}

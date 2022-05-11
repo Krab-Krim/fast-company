@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import api from "../api";
-import Loader from "./loader";
-import pictures from "../statics/images/images.png";
+import api from "../../../api";
+import Loader from "../../common/loader";
+import pictures from "../../../statics/images/images.png";
 
 const UserPage = ({ userListId }) => {
     const [userId, setUserId] = useState();
@@ -18,7 +18,7 @@ const UserPage = ({ userListId }) => {
     const history = useHistory();
 
     const handleSave = () => {
-        history.push("/users");
+        history.push(`/users/${userListId}/edit`);
     };
 
     return (
@@ -39,7 +39,7 @@ const UserPage = ({ userListId }) => {
                     <div className="p-2">Количество встреч: {userId.completedMeetings}</div>
                     <div className="p-2">Рейтинг: {userId.rate}</div>
                 </div>
-                <button type="button" className="btn btn-primary btn-lg" onClick={() => handleSave()}>Все пользователи</button>
+                <button type="button" className="btn btn-primary btn-lg" onClick={() => handleSave()}>Изменить</button>
             </div>
             : <Loader/>
     );
