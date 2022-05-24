@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 import api from "../../../api";
 import Loader from "../../common/loader";
 import pictures from "../../../statics/images/images.png";
+import UserCard from "../../ui/userCard";
+import QualitiesCard from "../../ui/qualitiesCard";
+import MeetingsCard from "../../ui/meetingsCard";
+import Comments from "../../ui/comments";
 
 const UserPage = ({ userListId }) => {
     const [userId, setUserId] = useState();
@@ -15,31 +18,19 @@ const UserPage = ({ userListId }) => {
         });
     }, []);
 
-    const history = useHistory();
-
-    const handleSave = () => {
-        history.push(`/users/${userListId}/edit`);
-    };
-
     return (
         userId
-            ? <div className="m-3 page-header">
-                <div className="d-flex flex-column" >
-                    <div className="p-2">Имя пользователя: {userId.name}</div>
-                    <div className="p-2">Профессия: {userId.profession.name}</div>
-                    <div className="p-2">Качества: {userId.qualities.map((colors) => {
-                        const className = `badge bg-${colors.color} m-2`;
-                        return (
-                            <span key={colors._id} className={className}>
-                                {colors.name}
-                            </span>
-                        );
-                    })}
+            ? <div className="container">
+                <div className="row gutters-sm">
+                    <div className="col-md-4 mb-3">
+                        <UserCard user={userId} userListId={userListId}/>
+                        <QualitiesCard data={userId} />
+                        <MeetingsCard value={userId.completedMeetings} />
                     </div>
-                    <div className="p-2">Количество встреч: {userId.completedMeetings}</div>
-                    <div className="p-2">Рейтинг: {userId.rate}</div>
+                    <div className="col-md-8">
+                        <Comments />
+                    </div>
                 </div>
-                <button type="button" className="btn btn-primary btn-lg" onClick={() => handleSave()}>Изменить</button>
             </div>
             : <Loader/>
     );

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Qualitie = ({ color }) => {
+const Quality = ({ color }) => {
     const getListUsersColor = color.qualities.map((colors) => {
         const className = `badge bg-${colors.color} m-2`;
         return (
@@ -14,8 +14,8 @@ const Qualitie = ({ color }) => {
     return <>{getListUsersColor}</>;
 };
 
-Qualitie.propTypes = {
+Quality.propTypes = {
     color: PropTypes.object.isRequired
 };
 
-export default Qualitie;
+export default Quality;
