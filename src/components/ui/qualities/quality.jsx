@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Quality = ({ color }) => {
-    const getListUsersColor = color.qualities.map((colors) => {
+    const getListUsersColor = color.map((colors) => {
         const className = `badge bg-${colors.color} m-2`;
         return (
             <span key={colors._id} className={className}>
@@ -15,7 +15,7 @@ const Quality = ({ color }) => {
 };
 
 Quality.propTypes = {
-    color: PropTypes.object.isRequired
+    color: PropTypes.array.isRequired
 };
 
 export default Quality;
