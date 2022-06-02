@@ -1,12 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Search = ({ setValue, clearFilter }) => {
-    const onSearch = (event) => {
-        clearFilter();
-        setValue(event.target.value);
-    };
-
+const Search = ({ onChange, value }) => {
     return (
         <>
             <nav className="navbar navbar-light justify-content-center mb-3">
@@ -16,7 +11,8 @@ const Search = ({ setValue, clearFilter }) => {
                         type="text"
                         placeholder="Поиск по списку"
                         aria-label="Search"
-                        onChange={onSearch}
+                        onChange={onChange}
+                        value={value}
                     />
                     <span className="input-group-text bg-light">
                         <i className="bi bi-search"></i>
@@ -28,8 +24,8 @@ const Search = ({ setValue, clearFilter }) => {
 };
 
 Search.propTypes = {
-    setValue: PropTypes.func,
-    clearFilter: PropTypes.func
+    onChange: PropTypes.func,
+    value: PropTypes.func
 };
 
 export default Search;
