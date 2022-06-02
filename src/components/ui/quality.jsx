@@ -6,9 +6,8 @@ import Qualities from "./qualities";
 const Quality = ({ id }) => {
     const { isLoading, getQuality } = useQualities();
     const quality = getQuality(id);
-    if (!isLoading) {
-        return <Qualities item={quality}/>;
-    } else return "Loading...";
+    if (!isLoading) return <Qualities item={quality}/>;
+    return "Loading...";
 };
 Quality.propTypes = {
     id: PropTypes.array
