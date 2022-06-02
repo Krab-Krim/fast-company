@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import BookMark from "../common/bookmark";
-import Qualities from "./qualities";
 import Table from "../common/table";
+import Profession from "./profession";
+import Quality from "./quality";
 
 const UserTable = ({ user, onSort, selectedSort, ...props }) => {
     const columns = {
@@ -13,11 +14,11 @@ const UserTable = ({ user, onSort, selectedSort, ...props }) => {
         qualities: {
             path: "qualities",
             name: "Качества",
-            component: (user) => <Qualities item={user}/>
+            component: (user) => <Quality id={user.qualities}/>
         },
         professions: {
-            path: "profession.name",
-            name: "Профессия"
+            name: "Профессия",
+            component: (user) => <Profession id={user.profession}/>
         },
         completedMeetings: {
             path: "completedMeetings",

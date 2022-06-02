@@ -11,7 +11,7 @@ const QualitiesList = ({ item }) => {
 };
 
 QualitiesList.propTypes = {
-    item: PropTypes.object
+    item: PropTypes.array
 };
 
 export default QualitiesList;

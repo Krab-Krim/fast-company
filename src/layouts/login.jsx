@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LoginForm from "../components/ui/loginForm";
 import { useParams } from "react-router-dom";
 import RegisterForm from "../components/ui/registerForm";
+import pictures from "../statics/images/images.png";
 
 const Login = () => {
     const { type } = useParams();
@@ -10,6 +11,11 @@ const Login = () => {
     const toggleFormType = () => {
         setFormType(prevState => prevState === "register" ? "login" : "register");
     };
+
+    document.body.style.backgroundImage = `url(${pictures})`;
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundAttachment = "fixed";
+    document.body.style.backgroundPosition = "center";
 
     return (
         <>
