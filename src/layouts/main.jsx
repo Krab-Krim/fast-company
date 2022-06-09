@@ -4,9 +4,7 @@ import useMockData from "../utils/mockData";
 
 const Main = () => {
     const { error, initialize, progress, status } = useMockData();
-    const handleClick = () => {
-        initialize();
-    };
+    const handleClick = () => initialize();
 
     document.body.style.backgroundImage = `url(${pictures})`;
     document.body.style.backgroundRepeat = "no-repeat";

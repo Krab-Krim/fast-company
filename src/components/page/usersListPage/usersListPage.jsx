@@ -54,7 +54,7 @@ const UserListPage = () => {
         setSelectedProf(item);
     };
     const handleSearchQuery = ({ target }) => {
-        setSelectedProf(undefined);
+        setSelectedProf(null);
         setSearchQuery(target.value);
     };
 
