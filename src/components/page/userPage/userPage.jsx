@@ -1,43 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../api";
-import Loader from "../../common/loader";
-import pictures from "../../../statics/images/images.png";
 import UserCard from "../../ui/userCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
+import { useUser } from "../../../hooks/useUsers";
+import { CommentsProvider } from "../../../hooks/useComments";
 
-const UserPage = ({ userListId }) => {
-    const [userId, setUserId] = useState();
-
-    useEffect(() => {
-        api.users.getById(userListId).then((data) => {
-            if (data) document.body.style.backgroundImage = `url(${pictures})`;
-            setUserId(data);
-        });
-    }, []);
-
-    return (
-        userId
-            ? <div className="container">
+const UserPage = ({ userId }) => {
+    const { getUserById } = useUser();
+    const user = getUserById(userId);
+    if (user) {
+        return (
+            <div className="container">
                 <div className="row gutters-sm">
                     <div className="col-md-4 mb-3">
-                        <UserCard user={userId} userListId={userListId}/>
-                        <QualitiesCard data={userId} />
-                        <MeetingsCard value={userId.completedMeetings} />
+                        <UserCard user={user} />
+                        <QualitiesCard data={user.qualities} />
+                        <MeetingsCard value={user.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <Comments />
+                        <CommentsProvider>
+                            <Comments />
+                        </CommentsProvider>
                     </div>
                 </div>
             </div>
-            : <Loader/>
-    );
+        );
+    } else {
+        return <h1>Loading</h1>;
+    }
 };
 
 UserPage.propTypes = {
-    userListId: PropTypes.string
+    userId: PropTypes.string.isRequired
 };
 
 export default UserPage;
