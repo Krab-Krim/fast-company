@@ -29,7 +29,6 @@ function App() {
                                 <Route path="/" exact exactly component={Main}/>
                                 <Route path="/login/:type?" exactly component={Login}/>
                                 <Route path="/logout" component={LogOut}/>
-                                {/* <Route path="/users/:userId?/:edit?" component={Users} /> */}
                                 <Route path="/404" exactly component={NotFound}/>
                                 <Redirect from="/admin" to="/"/>
                                 <Redirect to="/404"/>

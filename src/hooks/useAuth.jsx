@@ -94,10 +94,41 @@ const AuthProvider = ({ children }) => {
             }
         }
     }
+    async function updateUser({ ...rest }) {
+        try {
+            const { data } = await httpAuth.post(`accounts:update`, {
+                rest,
+                returnSecureToken: true
+            });
+            console.log("data", data);
+            console.log("rest11", rest);
+            setTokens(rest);
+            await createUser({
+                _id: rest.localId,
+                email: rest.email,
+                rate: rest.rate,
+                completedMeetings: rest.completedMeetings,
+                image: rest.image,
+                ...rest
+            });
+        } catch (error) {
+            errorCatcher(error);
+            const { code, message } = error.response.data.error;
+            console.log(code, message);
+            if (code === 400) {
+                if (message === "EMAIL_EXISTS") {
+                    const errorObject = {
+                        email: "Пользователь с таким Email уже существует"
+                    };
+                    throw errorObject;
+                }
+            }
+        }
+    }
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
-            console.log(content);
+            console.log("content", content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
@@ -131,7 +162,7 @@ const AuthProvider = ({ children }) => {
         }
     }, [error]);
     return (
-        <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut }}>
+        <AuthContext.Provider value={{ signUp, logIn, currentUser, logOut, updateUser }}>
             {!isLoading ? children : "Loading..."}
         </AuthContext.Provider>
     );
