@@ -1,28 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-const UserCard = ({ userListId, user }) => {
+import { useAuth } from "../../hooks/useAuth";
+const UserCard = ({ user }) => {
     const history = useHistory();
+    const { currentUser } = useAuth();
     const handleClick = () => {
-        history.push(`/users/${userListId}/edit`);
+        history.push(history.location.pathname + "/edit");
     };
-
     return (
         <div className="card mb-3">
             <div className="card-body">
-                <button
-                    className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                    onClick={handleClick}
-                >
-                    <i className="bi bi-gear"></i>
-                </button>
+                {currentUser._id === user._id && (
+                    <button
+                        className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                        onClick={handleClick}
+                    >
+                        <i className="bi bi-gear"></i>
+                    </button>
+                )}
+
                 <div className="d-flex flex-column align-items-center text-center position-relative">
                     <img
-                        src={`https://avatars.dicebear.com/api/avataaars/${(
-                            Math.random() + 1
-                        )
-                            .toString(36)
-                            .substring(7)}.svg`}
+                        src={user.image}
                         className="rounded-circle"
                         width="150"
                     />
@@ -49,8 +49,7 @@ const UserCard = ({ userListId, user }) => {
     );
 };
 UserCard.propTypes = {
-    user: PropTypes.object,
-    userListId: PropTypes.string
+    user: PropTypes.object
 };
 
 export default UserCard;

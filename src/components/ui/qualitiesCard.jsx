@@ -10,14 +10,14 @@ const QualitiesCard = ({ data }) => {
                     <span>Qualities</span>
                 </h5>
                 <p className="card-text">
-                    <Qualities item={data} />
+                    <Qualities qualities={data} />
                 </p>
             </div>
         </div>
     );
 };
 QualitiesCard.propTypes = {
-    data: PropTypes.object
+    data: PropTypes.array
 };
 
 export default QualitiesCard;

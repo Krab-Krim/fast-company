@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import BookMark from "../common/bookmark";
 import Table from "../common/table";
 import Profession from "./profession";
-import Quality from "./quality";
+import Qualities from "./qualities";
 
 const UserTable = ({ user, onSort, selectedSort, ...props }) => {
     const columns = {
@@ -12,9 +12,8 @@ const UserTable = ({ user, onSort, selectedSort, ...props }) => {
             name: "Имя"
         },
         qualities: {
-            path: "qualities",
             name: "Качества",
-            component: (user) => <Quality id={user.qualities}/>
+            component: (user) => <Qualities qualities={user.qualities} />
         },
         professions: {
             name: "Профессия",
@@ -37,18 +36,6 @@ const UserTable = ({ user, onSort, selectedSort, ...props }) => {
                     status={user}
                 />
             )
-        },
-        delete: {
-            component: (user) => (
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => props.onDelete(user._id)}
-                    key={user._id}
-                >
-                    Удалить
-                </button>
-            )
         }
     };
 
@@ -66,7 +53,6 @@ UserTable.propTypes = {
     user: PropTypes.array.isRequired,
     props: PropTypes.object,
     onToggleBookMark: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired
 };
