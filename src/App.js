@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import NavBar from "./components/ui/navBar";
@@ -6,20 +6,25 @@ import Main from "./layouts/main";
 import Login from "./layouts/login";
 import NotFound from "./components/page/notFound";
 import { ProfessionProvider } from "./hooks/useProfession";
-import { QualitiesProvider } from "./hooks/useQualities";
 import Users from "./layouts/users";
 import AuthProvider from "./hooks/useAuth";
 import AuthProviderLogIn from "./hooks/useAuthLogIn";
 import ProtectedRoute from "./components/common/protectedRoute";
 import LogOut from "./layouts/logOut";
+import { useDispatch } from "react-redux";
+import { loadQualitiesList } from "./store/qualities";
 
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loadQualitiesList());
+    }, []);
     return (
         <div>
             <AuthProvider>
                 <AuthProviderLogIn>
                     <NavBar/>
-                    <QualitiesProvider>
+
                         <ProfessionProvider>
                             <Switch>
                                 <ProtectedRoute
@@ -34,7 +39,7 @@ function App() {
                                 <Redirect to="/404"/>
                             </Switch>
                         </ProfessionProvider>
-                    </QualitiesProvider>
+
                 </AuthProviderLogIn>
             </AuthProvider>
             <ToastContainer/>
