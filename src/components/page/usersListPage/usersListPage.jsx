@@ -30,10 +30,6 @@ const UserListPage = () => {
     document.body.style.backgroundAttachment = "fixed";
     document.body.style.backgroundPosition = "center";
 
-    const handleDelete = (userId) => {
-        console.log(userId);
-    };
-
     const handleToggleBookMark = (id) => {
         return users.map((colorIcon) => {
             if (colorIcon._id === id) {
@@ -94,14 +90,6 @@ const UserListPage = () => {
             setSelectedProf();
         };
 
-        const handleDeleteUser = (userId) => {
-            handleDelete(userId);
-            const pageCountUser = Math.ceil(count / pageSize);
-
-            if (count % 2 !== 0 && currentPage === pageCountUser) setCurrentPage(pageCountUser - 1);
-            if (count - 1 === 0) clearFilter();
-        };
-
         return <>
             <div className="d-flex">
                 {professions && !professionsLoading && (
@@ -125,7 +113,6 @@ const UserListPage = () => {
                     {count > 0 && (
                         <UserTable
                             user={userCrop}
-                            onDelete={handleDeleteUser}
                             onToggleBookMark={handleToggleBookMark}
                             onSort={handleSort}
                             selectedSort={sortBy}
