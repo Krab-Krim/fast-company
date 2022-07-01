@@ -7,16 +7,20 @@ import Search from "../../common/search";
 import pictures from "../../../statics/images/images.png";
 import _ from "lodash";
 import { paginate } from "../../../utils/paginate";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UserListPage = () => {
-    const { users } = useUser();
-    const { currentUser } = useAuth();
+    const users = useSelector(getUsersList());
+    const currentUserId = useSelector(getCurrentUserId());
     const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
-    const { isLoading: professionsLoading, professions } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,10 +29,6 @@ const UserListPage = () => {
     document.body.style.backgroundRepeat = "no-repeat";
     document.body.style.backgroundAttachment = "fixed";
     document.body.style.backgroundPosition = "center";
-
-    const handleDelete = (userId) => {
-        console.log(userId);
-    };
 
     const handleToggleBookMark = (id) => {
         return users.map((colorIcon) => {
@@ -76,7 +76,7 @@ const UserListPage = () => {
                             JSON.stringify(selectedProf)
                     )
                     : data;
-            return filteredUsers.filter((u) => u._id !== currentUser._id);
+            return filteredUsers.filter((u) => u._id !== currentUserId);
         }
         const filteredUsers = filterUsers(users);
 
@@ -88,14 +88,6 @@ const UserListPage = () => {
 
         const clearFilter = () => {
             setSelectedProf();
-        };
-
-        const handleDeleteUser = (userId) => {
-            handleDelete(userId);
-            const pageCountUser = Math.ceil(count / pageSize);
-
-            if (count % 2 !== 0 && currentPage === pageCountUser) setCurrentPage(pageCountUser - 1);
-            if (count - 1 === 0) clearFilter();
         };
 
         return <>
@@ -121,7 +113,6 @@ const UserListPage = () => {
                     {count > 0 && (
                         <UserTable
                             user={userCrop}
-                            onDelete={handleDeleteUser}
                             onToggleBookMark={handleToggleBookMark}
                             onSort={handleSort}
                             selectedSort={sortBy}
