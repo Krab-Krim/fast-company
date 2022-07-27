@@ -1,11 +1,9 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
-import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
-import getRandomInt from "../utils/getRandomInt";
+import userService from "../services/user.service";
+import { generetaAuthError } from "../utils/generateAuthError";
 import history from "../utils/history";
-import { generateAuthError } from "../utils/generateAuthError";
-
 const initialState = localStorageService.getAccessToken()
     ? {
         entities: null,
@@ -31,12 +29,12 @@ const usersSlice = createSlice({
         usersRequested: (state) => {
             state.isLoading = true;
         },
-        usersReceived: (state, action) => {
+        usersReceved: (state, action) => {
             state.entities = action.payload;
             state.dataLoaded = true;
             state.isLoading = false;
         },
-        usersRequestFailed: (state, action) => {
+        usersRequestFiled: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
         },
@@ -48,9 +46,6 @@ const usersSlice = createSlice({
             state.error = action.payload;
         },
         userCreated: (state, action) => {
-            if (!Array.isArray(state.entities)) {
-                state.entities = [];
-            }
             state.entities.push(action.payload);
         },
         userLoggedOut: (state) => {
@@ -73,20 +68,17 @@ const usersSlice = createSlice({
 const { reducer: usersReducer, actions } = usersSlice;
 const {
     usersRequested,
-    usersReceived,
-    usersRequestFailed,
-    authRequestSuccess,
+    usersReceved,
+    usersRequestFiled,
     authRequestFailed,
-    userCreated,
+    authRequestSuccess,
     userLoggedOut,
     userUpdateSuccessed
 } = actions;
 
 const authRequested = createAction("users/authRequested");
-const userCreateRequested = createAction("users/userCreateRequested");
-const createUserFailed = createAction("users/createUserFailed");
-const userUpdateRequested = createAction("users/userUpdateRequested");
 const userUpdateFailed = createAction("users/userUpdateFailed");
+const userUpdateRequested = createAction("users/userUpdateRequested");
 
 export const login =
     ({ payload, redirect }) =>
@@ -95,13 +87,13 @@ export const login =
             dispatch(authRequested());
             try {
                 const data = await authService.login({ email, password });
-                dispatch(authRequestSuccess({ userId: data.localId }));
                 localStorageService.setTokens(data);
+                dispatch(authRequestSuccess({ userId: data.userId }));
                 history.push(redirect);
             } catch (error) {
                 const { code, message } = error.response.data.error;
                 if (code === 400) {
-                    const errorMessage = generateAuthError(message);
+                    const errorMessage = generetaAuthError(message);
                     dispatch(authRequestFailed(errorMessage));
                 } else {
                     dispatch(authRequestFailed(error.message));
@@ -109,57 +101,30 @@ export const login =
             }
         };
 
-export const signUp =
-    ({ email, password, ...rest }) =>
-        async (dispatch) => {
-            dispatch(authRequested());
-            try {
-                const data = await authService.register({ email, password });
-                localStorageService.setTokens(data);
-                dispatch(authRequestSuccess({ userId: data.localId }));
-                dispatch(
-                    createUser({
-                        _id: data.localId,
-                        email,
-                        rate: getRandomInt(1, 5),
-                        completedMeetings: getRandomInt(0, 200),
-                        image: `https://avatars.dicebear.com/api/avataaars/${(
-                            Math.random() + 1
-                        )
-                            .toString(36)
-                            .substring(7)}.svg`,
-                        ...rest
-                    })
-                );
-            } catch (error) {
-                dispatch(authRequestFailed(error.message));
-            }
-        };
+export const signUp = (payload) =>
+    async (dispatch) => {
+        dispatch(authRequested());
+        try {
+            const data = await authService.register(payload);
+            localStorageService.setTokens(data);
+            dispatch(authRequestSuccess({ userId: data.userId }));
+            history.push("/users");
+        } catch (error) {
+            dispatch(authRequestFailed(error.message));
+        }
+    };
 export const logOut = () => (dispatch) => {
     localStorageService.removeAuthData();
     dispatch(userLoggedOut());
     history.push("/");
 };
-function createUser(payload) {
-    return async function (dispatch) {
-        dispatch(userCreateRequested());
-        try {
-            const { content } = await userService.create(payload);
-            dispatch(userCreated(content));
-            history.push("/users");
-        } catch (error) {
-            dispatch(createUserFailed(error.message));
-        }
-    };
-}
-
-export const loadUsersList = () => async (dispatch, getState) => {
+export const loadUsersList = () => async (dispatch) => {
     dispatch(usersRequested());
     try {
         const { content } = await userService.get();
-        dispatch(usersReceived(content));
+        dispatch(usersReceved(content));
     } catch (error) {
-        dispatch(usersRequestFailed(error.message));
+        dispatch(usersRequestFiled(error.message));
     }
 };
 export const updateUser = (payload) => async (dispatch) => {
@@ -190,5 +155,4 @@ export const getDataStatus = () => (state) => state.users.dataLoaded;
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
 export const getAuthErrors = () => (state) => state.users.error;
-
 export default usersReducer;
